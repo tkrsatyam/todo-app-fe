@@ -1,1 +1,18 @@
-<p>todo-item works!</p>
+<div class="todo-item" [class.completed]="todo().completed">
+    <input
+        type="checkbox"
+        [checked]="todo().completed"
+        (change)="onToggle()">
+    
+    <div class="todo-content">
+        <span class="todo-title">{{ todo().title }}</span>
+        @if (todo().description) {
+            <span class="todo-description">{{ todo().description }}</span>
+        }
+    </div>
+
+    <div class="todo-actions">
+        <button (click)="onEdit()">Edit</button>
+        <button (click)="onDelete()">Delete</button>
+    </div>
+</div>
