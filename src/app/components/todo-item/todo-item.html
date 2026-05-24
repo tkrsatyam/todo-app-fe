@@ -1,6 +1,7 @@
 <div class="todo-item" [class.completed]="todo().completed">
     <input
         type="checkbox"
+        class="todo-checkbox"
         [checked]="todo().completed"
         (change)="onToggle()">
     
@@ -12,7 +13,7 @@
     </div>
 
     <div class="todo-actions">
-        <button (click)="onEdit()">Edit</button>
-        <button (click)="onDelete()">Delete</button>
+        <button class="btn-edit" (click)="onEdit()">Edit</button>
+        <button class="btn-delete" (click)="onDelete()">Delete</button>
     </div>
 </div>
