@@ -24,7 +24,7 @@
 
         @if (isEditing) {
             <div class="form-group">
-                <label>
+                <label class="checkbox-label">
                     <input
                         type="checkbox"
                         name="completed"
@@ -37,11 +37,13 @@
         <div class="form-actions">
             <button
                 type="submit"
+                class="btn-primary"
                 [disabled]="!formData.title.trim()">
                 {{ isEditing ? 'Update' : 'Create' }}
             </button>
             <button
                 type="button"
+                class="btn-secondary"
                 (click)="onCancel()">
                 Cancel
             </button>
