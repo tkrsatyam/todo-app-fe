@@ -4,6 +4,13 @@
         <button (click)="openNewForm()" [disabled]="loading()">+ New Todo</button>
     </header>
 
+    @if (error()) {
+        <div class="error-banner">
+            <span>{{ error() }}</span>
+            <button class="dismiss-btn" (click)="dismissError()">🗙</button>
+        </div>
+    }
+
     @if (showForm()) {
         <app-todo-form
             [todo]="editingTodo()"

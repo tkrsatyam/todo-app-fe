@@ -15,6 +15,7 @@ export class TodoList {
   editingTodo = signal<Todo | null>(null);
   showForm = signal(false);
   loading = signal(false);
+  error = signal<string | null>(null);
 
   constructor(private todoService: TodoService) {}
 
@@ -24,12 +25,14 @@ export class TodoList {
 
   loadTodos(): void {
     this.loading.set(true);
+    this.error.set(null);
     this.todoService.getAll().subscribe({
       next: (todos) => {
         this.todos.set(todos);
         this.loading.set(false);
       },
       error: () => {
+        this.error.set('Failed to load todos. Please try again.');
         this.loading.set(false);
       }
     });
@@ -47,13 +50,17 @@ export class TodoList {
 
   onSave(todo: Todo): void {
     this.loading.set(true);
+    this.error.set(null);
     if (todo.id) {
       this.todoService.update(todo.id, todo).subscribe({
         next: () => {
         this.loadTodos();
         this.closeForm();
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.error.set('Failed to save todo. Please try again.');
+        this.loading.set(false)
+      }
       });
     } else {
       this.todoService.create(todo).subscribe({
@@ -61,7 +68,10 @@ export class TodoList {
         this.loadTodos();
         this.closeForm();
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.error.set('Failed to create todo. Please try again.');
+        this.loading.set(false)
+      }
       });
     }
   }
@@ -69,7 +79,10 @@ export class TodoList {
   onToggle(id: number): void {
     this.todoService.toggleComplete(id).subscribe({
       next: () => this.loadTodos(),
-      error: () => this.loading.set(false)
+      error: () => {
+        this.error.set('Failed to update todo as completed. Please try again.');
+        this.loading.set(false)
+      }
     });
   }
 
@@ -81,8 +94,15 @@ export class TodoList {
   onDelete(id: number): void {
     this.todoService.delete(id).subscribe({
       next: () => this.loadTodos(),
-      error: () => this.loading.set(false)
+      error: () => {
+        this.error.set('Failed to delete todo. Please try again.');
+        this.loading.set(false)
+      }
     });
+  }
+
+  dismissError(): void {
+    this.error.set(null);
   }
 
 }

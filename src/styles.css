@@ -11,6 +11,9 @@
     --color-surface: #ffffff;
     --color-border: #e2e8f0;
 
+    --color-bg-error: #fef2f2;
+    --color-border-error: #fecaca;
+
     --color-text-primary: #0f172a;
     --color-text-secondary: #64748b;
     --color-text-muted: #94a3b8;
