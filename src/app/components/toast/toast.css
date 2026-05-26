@@ -1,0 +1,48 @@
+.toast {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.toast-success {
+    background: var(--color-bg-success);
+    border: 1px solid var(--color-border-success);
+    color: var(--color-success);
+}
+
+.toast-error {
+    background: var(--color-bg-error);
+    border: 1px solid var(--color-border-error);
+    color: var(--color-danger);
+}
+
+.toast button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    color: inherit;
+    line-height: 1;
+}

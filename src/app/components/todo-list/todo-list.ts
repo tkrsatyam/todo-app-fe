@@ -3,10 +3,11 @@ import { Todo } from '../../models/todo.model';
 import { TodoService } from '../../services/todo';
 import { TodoForm } from "../todo-form/todo-form";
 import { TodoItem } from "../todo-item/todo-item";
+import { Toast } from "../toast/toast";
 
 @Component({
   selector: 'app-todo-list',
-  imports: [TodoForm, TodoItem],
+  imports: [TodoForm, TodoItem, Toast],
   templateUrl: './todo-list.html',
   styleUrl: './todo-list.css',
 })
@@ -16,6 +17,8 @@ export class TodoList {
   showForm = signal(false);
   loading = signal(false);
   error = signal<string | null>(null);
+
+  toast = signal<{ message: string; type: 'success' | 'error' } | null>(null);
 
   constructor(private todoService: TodoService) {}
 
@@ -56,6 +59,7 @@ export class TodoList {
         next: () => {
         this.loadTodos();
         this.closeForm();
+        this.showToast('Todo updated successfully');
       },
       error: () => {
         this.error.set('Failed to save todo. Please try again.');
@@ -67,6 +71,7 @@ export class TodoList {
         next: () => {
         this.loadTodos();
         this.closeForm();
+        this.showToast('Todo created successfully');
       },
       error: () => {
         this.error.set('Failed to create todo. Please try again.');
@@ -93,7 +98,10 @@ export class TodoList {
 
   onDelete(id: number): void {
     this.todoService.delete(id).subscribe({
-      next: () => this.loadTodos(),
+      next: () => {
+        this.loadTodos();
+        this.showToast('Todo deleted successfully');
+      },
       error: () => {
         this.error.set('Failed to delete todo. Please try again.');
         this.loading.set(false)
@@ -103,6 +111,14 @@ export class TodoList {
 
   dismissError(): void {
     this.error.set(null);
+  }
+
+  showToast(message: string, type: 'success' | 'error' = 'success'): void {
+    this.toast.set({ message, type });
+  }
+
+  dismissToast(): void {
+    this.toast.set(null);
   }
 
 }

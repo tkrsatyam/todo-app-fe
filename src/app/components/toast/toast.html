@@ -1,0 +1,4 @@
+<div class="toast" [class.toast-success]="type() === 'success'" [class.toast-error]="type() === 'error'">
+    <span>{{ message() }}</span>
+    <button (click)="dismiss.emit()">🗙</button>
+</div>

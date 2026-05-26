@@ -45,3 +45,11 @@
         }
     }
 </div>
+
+@if (toast()) {
+    <app-toast
+        [message]="toast()!.message"
+        [type]="toast()!.type"
+        (dismiss)="dismissToast()">
+    </app-toast>
+}
