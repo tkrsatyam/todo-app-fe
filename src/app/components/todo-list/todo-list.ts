@@ -80,7 +80,10 @@ export class TodoList {
 
   onToggle(id: number): void {
     this.todoService.toggleComplete(id).subscribe({
-      next: () => this.loadTodos(),
+      next: () => {
+        this.loadTodos();
+        this.showToast('Todo updated successfully');
+      },
       error: () => {
         this.loading.set(false)
         this.showToast('Failed to update todo. Please try again.', 'error');
