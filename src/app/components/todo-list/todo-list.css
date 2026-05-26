@@ -26,29 +26,6 @@
     background-color: var(--color-primary-hover);
 }
 
-.error-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--color-bg-error);
-    border: 1px solid var(--color-border-error);
-    border-radius: var(--radius);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    color: var(--color-danger);
-    font-size: 0.9rem;
-}
-
-.dismiss-btn {
-    background: none;
-    border: none;
-    color: var(--color-danger);
-    font-size: 1rem;
-    padding: 0;
-    cursor: pointer;
-    line-height: 1;
-}
-
 .loading-state {
     display: flex;
     align-items: center;

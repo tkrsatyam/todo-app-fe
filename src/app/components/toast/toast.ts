@@ -9,6 +9,7 @@ import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
 export class Toast implements OnInit, OnDestroy {
   message = input.required<string>();
   type = input<'success' | 'error'>('success');
+  duration = input<number>(5000);
   dismiss = output<void>();
 
   private timer: any;
@@ -16,7 +17,7 @@ export class Toast implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.timer = setTimeout(() => {
       this.dismiss.emit();
-    }, 10000);
+    }, this.duration());
   }
 
   ngOnDestroy(): void {

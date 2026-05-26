@@ -16,9 +16,8 @@ export class TodoList {
   editingTodo = signal<Todo | null>(null);
   showForm = signal(false);
   loading = signal(false);
-  error = signal<string | null>(null);
 
-  toast = signal<{ message: string; type: 'success' | 'error' } | null>(null);
+  toast = signal<{ message: string; type: 'success' | 'error'; duration: number } | null>(null);
 
   constructor(private todoService: TodoService) {}
 
@@ -28,15 +27,14 @@ export class TodoList {
 
   loadTodos(): void {
     this.loading.set(true);
-    this.error.set(null);
     this.todoService.getAll().subscribe({
       next: (todos) => {
         this.todos.set(todos);
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('Failed to load todos. Please try again.');
         this.loading.set(false);
+        this.showToast('Failed to load todos. Please try again.', 'error');
       }
     });
   }
@@ -53,30 +51,29 @@ export class TodoList {
 
   onSave(todo: Todo): void {
     this.loading.set(true);
-    this.error.set(null);
     if (todo.id) {
       this.todoService.update(todo.id, todo).subscribe({
         next: () => {
-        this.loadTodos();
-        this.closeForm();
-        this.showToast('Todo updated successfully');
-      },
-      error: () => {
-        this.error.set('Failed to save todo. Please try again.');
-        this.loading.set(false)
-      }
+          this.loadTodos();
+          this.closeForm();
+          this.showToast('Todo updated successfully');
+        },
+        error: () => {
+          this.loading.set(false)
+          this.showToast('Failed to update todo. Please try again.', 'error');
+        }
       });
     } else {
       this.todoService.create(todo).subscribe({
         next: () => {
-        this.loadTodos();
-        this.closeForm();
-        this.showToast('Todo created successfully');
-      },
-      error: () => {
-        this.error.set('Failed to create todo. Please try again.');
-        this.loading.set(false)
-      }
+          this.loadTodos();
+          this.closeForm();
+          this.showToast('Todo created successfully');
+        },
+        error: () => {
+          this.loading.set(false)
+          this.showToast('Failed to create todo. Please try again.', 'error');
+        }
       });
     }
   }
@@ -85,8 +82,8 @@ export class TodoList {
     this.todoService.toggleComplete(id).subscribe({
       next: () => this.loadTodos(),
       error: () => {
-        this.error.set('Failed to update todo as completed. Please try again.');
         this.loading.set(false)
+        this.showToast('Failed to update todo. Please try again.', 'error');
       }
     });
   }
@@ -103,18 +100,15 @@ export class TodoList {
         this.showToast('Todo deleted successfully');
       },
       error: () => {
-        this.error.set('Failed to delete todo. Please try again.');
         this.loading.set(false)
+        this.showToast('Failed to delete todo. Please try again.', 'error');
       }
     });
   }
 
-  dismissError(): void {
-    this.error.set(null);
-  }
-
   showToast(message: string, type: 'success' | 'error' = 'success'): void {
-    this.toast.set({ message, type });
+    const duration = type === 'error' ? 10000 : 5000;
+    this.toast.set({ message, type, duration });
   }
 
   dismissToast(): void {
