@@ -9,13 +9,17 @@
         <span class="todo-title">{{ todo().title }}</span>
 
         @if (todo().description) {
-            <span class="todo-description" [class.todo-description-expanded]="expanded()">
-                {{ todo().description }}
-            </span>
+            <div class="description-wrapper" [class.expanded]="expanded()">
+                <span #descriptionRef class="todo-description" [class.todo-description-expanded]="expanded()">
+                    {{ todo().description }}
+                </span>
 
-            <span class="expand-hint" (click)="toggleExpanded()">
-                {{ expanded() ? '˄' : '˅' }}
-            </span>
+                @if (showExpandIcon()) {
+                    <button class="expand-btn" (click)="toggleExpanded()">
+                        {{ expanded() ? '▴' : '▾' }}
+                    </button>
+                }
+            </div>
         }
     </div>
 
