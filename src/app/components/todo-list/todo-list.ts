@@ -14,6 +14,7 @@ export class TodoList {
   todos = signal<Todo[]>([]);
   editingTodo = signal<Todo | null>(null);
   showForm = signal(false);
+  loading = signal(false);
 
   constructor(private todoService: TodoService) {}
 
@@ -22,8 +23,15 @@ export class TodoList {
   }
 
   loadTodos(): void {
-    this.todoService.getAll().subscribe(todos => {
-      this.todos.set(todos);
+    this.loading.set(true);
+    this.todoService.getAll().subscribe({
+      next: (todos) => {
+        this.todos.set(todos);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
     });
   }
 
@@ -38,23 +46,31 @@ export class TodoList {
   }
 
   onSave(todo: Todo): void {
+    this.loading.set(true);
     if (todo.id) {
-      this.todoService.update(todo.id, todo).subscribe(() => {
+      this.todoService.update(todo.id, todo).subscribe({
+        next: () => {
         this.loadTodos();
         this.closeForm();
-      })
+      },
+      error: () => this.loading.set(false)
+      });
     } else {
-      this.todoService.create(todo).subscribe(() => {
+      this.todoService.create(todo).subscribe({
+        next: () => {
         this.loadTodos();
         this.closeForm();
-      })
+      },
+      error: () => this.loading.set(false)
+      });
     }
   }
 
   onToggle(id: number): void {
-    this.todoService.toggleComplete(id).subscribe(() => {
-      this.loadTodos();
-    })
+    this.todoService.toggleComplete(id).subscribe({
+      next: () => this.loadTodos(),
+      error: () => this.loading.set(false)
+    });
   }
 
   onEdit(todo: Todo): void {
@@ -63,9 +79,10 @@ export class TodoList {
   }
 
   onDelete(id: number): void {
-    this.todoService.delete(id).subscribe(() => {
-      this.loadTodos();
-    })
+    this.todoService.delete(id).subscribe({
+      next: () => this.loadTodos(),
+      error: () => this.loading.set(false)
+    });
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="todo-container">
     <header class="todo-header">
         <h1>My Todos</h1>
-        <button (click)="openNewForm()">+ New Todo</button>
+        <button (click)="openNewForm()" [disabled]="loading()">+ New Todo</button>
     </header>
 
     @if (showForm()) {
@@ -12,20 +12,29 @@
         </app-todo-form>
     }
 
-    @if (todos().length > 0) {
-        <div class="todo-items">
-            @for (todo of todos(); track todo.id) {
-                <app-todo-item
-                    [todo]="todo"
-                    (toggle)="onToggle($event)"
-                    (edit)="onEdit($event)"
-                    (delete)="onDelete($event)">
-                </app-todo-item>
-            }
+    @if (loading()) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Loading...</span>
         </div>
-    } @else {
-        <div class="empty-state">
-            <p>No todos yet. Create one above!</p>
-        </div>
+    }
+
+    @if (!loading()) {
+        @if (todos().length > 0) {
+            <div class="todo-items">
+                @for (todo of todos(); track todo.id) {
+                    <app-todo-item
+                        [todo]="todo"
+                        (toggle)="onToggle($event)"
+                        (edit)="onEdit($event)"
+                        (delete)="onDelete($event)">
+                    </app-todo-item>
+                }
+            </div>
+        } @else {
+            <div class="empty-state">
+                <p>No todos yet. Create one above!</p>
+            </div>
+        }
     }
 </div>
