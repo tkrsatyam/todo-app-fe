@@ -24,3 +24,11 @@
         <button class="btn-delete" (click)="onDelete()">Delete</button>
     </div>
 </div>
+
+@if (showDeleteModal()) {
+    <app-confirm-modal
+        message="Are you sure you want to delete '{{ todo().title }}'? This cannot be undone."
+        (confirm)="confirmDelete()"
+        (cancel)="cancelDelete()">
+    </app-confirm-modal>
+}
