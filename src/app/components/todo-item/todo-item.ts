@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { Todo } from '../../models/todo.model';
 
 @Component({
@@ -12,6 +12,7 @@ export class TodoItem {
   toggle = output<number>();
   edit = output<Todo>();
   delete = output<number>();
+  expanded = signal(false);
 
   onToggle(): void {
     this.toggle.emit(this.todo().id!);
@@ -23,5 +24,11 @@ export class TodoItem {
 
   onDelete(): void {
     this.delete.emit(this.todo().id!);
+  }
+
+  toggleExpanded(): void {
+    if (this.todo().description) {
+      this.expanded.set(!this.expanded());
+    }
   }
 }

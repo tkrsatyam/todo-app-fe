@@ -7,8 +7,15 @@
     
     <div class="todo-content">
         <span class="todo-title">{{ todo().title }}</span>
+
         @if (todo().description) {
-            <span class="todo-description">{{ todo().description }}</span>
+            <span class="todo-description" [class.todo-description-expanded]="expanded()">
+                {{ todo().description }}
+            </span>
+
+            <span class="expand-hint" (click)="toggleExpanded()">
+                {{ expanded() ? '˄' : '˅' }}
+            </span>
         }
     </div>
 
